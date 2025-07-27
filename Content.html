@@ -1,229 +1,131 @@
-<!DOCTYPE html>
-<!-- Coding By CodingNepal - youtube.com/codingnepal -->
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8" />
-    <title>Draggable Carousel Slider | CodingNepal</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
-  >
-  </head>
-  <body>
-    <div class="wrapper">
-      <i id="left" class="fa-solid fa-angle-left"></i>
-      <div class="carousel">
-     <a href="Physics Ch 1.html">  <img src="https://imgs.search.brave.com/E3KyiXIhSxdhJ6kszSiQa0LDeuZiyc1hCSSiGVHV2qE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGh5c2ljcy10/ZXh0Ym9vay1zY2ll/bmNlLWZvcm11bGFz/LXNjaG9vbC1ib2Fy/ZF84MDcxLTUwMTAw/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA" alt="img" draggable="false" /></a> 
-        <img src="https://i.pinimg.com/736x/d2/00/3d/d2003de0d0068e9ac9f5df2d3562ffec.jpg" alt="img" draggable="false" />
-        <img src="https://i.pinimg.com/736x/f0/3d/7d/f03d7d38c2ffef7775559818870d9ae0.jpg" alt="img" draggable="false" />
-        <a href="Physics Ch 1.html"> <img src="https://imgs.search.brave.com/E3KyiXIhSxdhJ6kszSiQa0LDeuZiyc1hCSSiGVHV2qE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGh5c2ljcy10/ZXh0Ym9vay1zY2ll/bmNlLWZvcm11bGFz/LXNjaG9vbC1ib2Fy/ZF84MDcxLTUwMTAw/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA" alt="img" draggable="false" /></a>
-        <img src="https://i.pinimg.com/736x/d2/00/3d/d2003de0d0068e9ac9f5df2d3562ffec.jpg" alt="img" draggable="false" />
-        <img src="https://i.pinimg.com/736x/f0/3d/7d/f03d7d38c2ffef7775559818870d9ae0.jpg" alt="img" draggable="false" />
-       <a href="Physics Ch 1.html">  <img src="https://imgs.search.brave.com/E3KyiXIhSxdhJ6kszSiQa0LDeuZiyc1hCSSiGVHV2qE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGh5c2ljcy10/ZXh0Ym9vay1zY2ll/bmNlLWZvcm11bGFz/LXNjaG9vbC1ib2Fy/ZF84MDcxLTUwMTAw/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA" alt="img" draggable="false" /></a>
-        <img src="https://i.pinimg.com/736x/d2/00/3d/d2003de0d0068e9ac9f5df2d3562ffec.jpg" alt="img" draggable="false" />
-        <img src="https://i.pinimg.com/736x/f0/3d/7d/f03d7d38c2ffef7775559818870d9ae0.jpg" alt="img" draggable="false" />
-      </div>
-      <i id="right" class="fa-solid fa-angle-right"></i>
-      <script>
-        // Select elements
-const carousel = document.querySelector(".carousel");
-const firstImage = carousel.querySelector("img");
-const arrowIcons = document.querySelectorAll(".wrapper i");
-
-// Variables for state management
-let isDragging = false;
-let startX = 0;
-let scrollStart = 0;
-let scrollDiff = 0;
-
-// Helper function to toggle arrow visibility
-const toggleArrowIcons = () => {
-  setTimeout(() => {
-    const maxScroll = Math.round(carousel.scrollWidth - carousel.clientWidth);
-    arrowIcons[0].style.display = carousel.scrollLeft <= 0 ? "none" : "block";
-    arrowIcons[1].style.display = Math.round(carousel.scrollLeft) >= maxScroll ? "none" : "block";
-  }, 100);
-};
-
-// Helper function to smoothly scroll the carousel
-const scrollCarousel = (direction) => {
-  const cardWidth = firstImage.clientWidth + 14; // Image width + margin
-  const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-  const scrollAmount = direction === "right" ? cardWidth : -cardWidth;
-
-  carousel.scrollLeft = Math.min(Math.max(carousel.scrollLeft + scrollAmount, 0), maxScroll);
-
-  toggleArrowIcons();
-};
-
-// Event listeners for arrows
-arrowIcons.forEach((icon) => {
-  icon.addEventListener("click", () => {
-    const direction = icon.id === "right" ? "right" : "left";
-    scrollCarousel(direction);
-  });
-});
-
-// Automatic adjustment after dragging
-const autoCenterImage = () => {
-  const cardWidth = firstImage.clientWidth + 14;
-  const offset = carousel.scrollLeft % cardWidth;
-  const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-
-  if (carousel.scrollLeft > 0 && carousel.scrollLeft < maxScroll) {
-    if (offset > cardWidth / 3) {
-      carousel.scrollLeft += cardWidth - offset; // Snap to the next image
-    } else {
-      carousel.scrollLeft -= offset; // Snap to the previous image
-    }
-  }
-
-  toggleArrowIcons();
-};
-
-// Dragging logic
-const startDragging = (event) => {
-  isDragging = true;
-  startX = event.pageX || event.touches[0].pageX;
-  scrollStart = carousel.scrollLeft;
-  carousel.classList.add("dragging");
-};
-
-const duringDrag = (event) => {
-  if (!isDragging) return;
-
-  const currentX = event.pageX || event.touches[0].pageX;
-  scrollDiff = currentX - startX;
-
-  carousel.scrollLeft = scrollStart - scrollDiff;
-};
-
-const stopDragging = () => {
-  if (!isDragging) return;
-
-  isDragging = false;
-  carousel.classList.remove("dragging");
-
-  if (Math.abs(scrollDiff) > 10) {
-    autoCenterImage();
-  }
-};
-
-// Attach event listeners
-carousel.addEventListener("mousedown", startDragging);
-carousel.addEventListener("touchstart", startDragging);
-
-document.addEventListener("mousemove", duringDrag);
-carousel.addEventListener("touchmove", duringDrag);
-
-document.addEventListener("mouseup", stopDragging);
-carousel.addEventListener("touchend", stopDragging);
-
-// Initial setup
-toggleArrowIcons();
-
-      </script>
-      <style>
-        /* Import Google font - Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  display: flex;
-  padding: 0 35px;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-image: url("https://i.pinimg.com/736x/77/76/56/7776562db47cd7f27e998bc16d73a98f.jpg");
-}
-
-.wrapper {
-  display: flex;
-  max-width: 1200px;
-  position: relative;
-}
-
-.wrapper i {
-  top: 50%;
-  height: 44px;
-  width: 44px;
-  color: #343F4F;
-  cursor: pointer;
-  font-size: 1.15rem;
-  position: absolute;
-  text-align: center;
-  line-height: 44px;
-  background: #fff;
-  border-radius: 50%;
-  transform: translateY(-50%);
-  transition: transform 0.1s linear;
-}
-
-.wrapper i:active {
-  transform: translateY(-50%) scale(0.9);
-}
-
-.wrapper i:hover {
-  background: #f2f2f2;
-}
-
-.wrapper i:first-child {
-  left: -22px;
-  display: none;
-}
-
-.wrapper i:last-child {
-  right: -22px;
-}
-
-.wrapper .carousel {
-  font-size: 0px;
-  cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
-  scroll-behavior: smooth;
-}
-
-.carousel.dragging {
-  cursor: grab;
-  scroll-behavior: auto;
-}
-
-.carousel.dragging img {
-  pointer-events: none;
-}
-
-.carousel img {
-  border-radius: 3%;
-  height: 340px;
-  object-fit: cover;
-  user-select: none;
-  margin-left: 14px;
-  width: calc(100% / 3);
-}
-
-.carousel img:first-child {
-  margin-left: 0px;
-}
-
-@media screen and (max-width: 900px) {
-  .carousel img {
-    width: calc(100% / 2);
-  }
-}
-
-@media screen and (max-width: 550px) {
-  .carousel img {
-    width: 100%;
-  }
-}
-      </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card-list">
+        <a href="PhysicsCh1.html" class="card-item">
+            <img src="https://i.pinimg.com/736x/4a/76/4f/4a764f8f03ba5f9b43d4703cedd11eb2.jpg" alt="Card Image">
+            <span class="developer">Subject</span>
+            <h3>Physics .</h3>
+            <div class="arrow">
+                <i class="fas fa-arrow-right card-icon"></i>
+            </div>
+        </a>
+        <a href="#" class="card-item">
+            <img src="https://i.pinimg.com/736x/77/dc/00/77dc0050a4ee3881a48b7ba46b0dc6da.jpg" alt="Card Image">
+            <span class="designer">Subject</span>
+            <h3>Chemistry.</h3>
+            <div class="arrow">
+                <i class="fas fa-arrow-right card-icon"></i>
+            </div>
+        </a>
+        <a href="#" class="card-item">
+            <img src="https://i.pinimg.com/736x/f0/3d/7d/f03d7d38c2ffef7775559818870d9ae0.jpg" alt="Card Image">
+            <span class="editor">Subject</span>
+            <h3>Maths</h3>
+            <div class="arrow">
+                <i class="fas fa-arrow-right card-icon"></i>
+            </div>
+        </a>
     </div>
-  </body>
-</html>
+    <style>
+      /* Importing Google font - Open Sans */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+body {
+    background: #ecececdb;
+}
+.card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    max-width: 1250px;
+    margin: 150px auto;
+    padding: 20px;
+    gap: 20px;
+}
+.card-list .card-item {
+    background: #fff;
+    padding: 26px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.04);
+    list-style: none;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: border 0.5s ease;
+}
+.card-list .card-item:hover {
+    border: 2px solid #000;
+}
+.card-list .card-item img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.card-list span {
+    display: inline-block;
+    background: #F7DFF5;
+    margin-top: 32px;
+    padding: 8px 15px;
+    font-size: 0.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+}
+.card-list .developer {
+    background-color: #F7DFF5; 
+    color: #B22485;
+}   
+.card-list .designer {
+    background-color: #d1e8ff;
+    color: #2968a8;
+}
+.card-list .editor {
+    background-color: #d6f8d6; 
+    color: #205c20;
+}
+.card-item h3 {
+    color: #000;
+    font-size: 1.438rem;
+    margin-top: 28px;
+    font-weight: 600;
+}
+.card-item .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-35deg);
+    height: 40px;
+    width: 40px;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 50%;
+    margin-top: 40px;
+    transition: 0.2s ease;
+}
+.card-list .card-item:hover .arrow  {
+    background: #000;
+    color: #fff; 
+}
+@media (max-width: 1200px) {
+    .card-list .card-item {
+        padding: 15px;
+    }
+}
+@media screen and (max-width: 980px) {
+    .card-list {
+        margin: 0 auto;
+    }
+}
+    </style>
