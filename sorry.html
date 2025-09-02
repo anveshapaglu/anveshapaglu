@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Sorry Buggu</title>
+ 
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="window">
+  <div id="buttons">
+    <a href="#" id="minimize"></a>
+    <a href="#" id="resize"></a>
+    <a href="#" id="close"></a>
+  </div>
+  <div id="title">Sorry Anvesha :- )</div>
+  <textarea id="textarea"></textarea>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- partial -->
+  <script>
+var textarea = $("textarea"),
+  speed = 80,
+  text = "I am so sorry Anvesha sach meh bache , i am grateful to have such a gem of a person as a partner , did'nt mean to cause you any kind of pain, I LOVE YOU So MUCH , and AM DEEPLY SORRY , yaar pta nhi kya hua merko maine aisa kyu kiya apke sath but sach me merko bohot pachtava hai teri kasam ki maine apko preshan kiya , i assure you aisa dubara nhi hoga , i know pyaar ke naam peh kisi ko hurt karna is NOT COOl at all and i dont want you to face any pain because of me i just love you so much roj tujhse itna kuch sikhta hu , hmesha tera aabhari rhu ga , HMESHA MERI HI REHNA , mai har roj apse sikh ke apne aap ko behtar karne ki koshish karu ga aur apko apna best dunga"
+;
+function writeText(text) {
+  textarea.text(textarea.text() + text[$("#textarea").text().length]);
+  if (textarea.text().length == text.length) {
+    clearInterval(timeout);
+  }
+}
+var timeout = setInterval("writeText(text)", speed);
+
+</script>
+
+<style>
+body {
+  height: 100vh;
+  margin: 0;
+  background: #e5c6c2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#window {
+  width: 350px;
+  background: #d9d9d9;
+  border-radius: 3px;
+  padding: 12px 0;
+  font-family: Verdana, sans-serif;
+  color: #333;
+}
+#buttons {
+  float: right;
+  margin-right: 12px;
+}
+#buttons a {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+}
+#minimize {
+  background: #3c6;
+}
+#resize {
+  background: #cc3;
+}
+#close {
+  background: #c33;
+}
+#title {
+  margin-left: 12px;
+}
+textarea {
+  width: 96%;
+  height: 140px;
+  margin-top: 10px;
+  border: 0;
+  padding: 2%;
+  font-family: Verdana, sans-serif;
+}
+</style>
+</body>
+</html>
